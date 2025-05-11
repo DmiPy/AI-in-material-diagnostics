@@ -8,27 +8,24 @@ import matplotlib.pyplot as plt
 
 # 1.Read all the files
 
-os.chdir("Z01")
+base_dir = os.path.dirname(os.path.abspath(__file__))
 
-wavfiles_z01 = []
+data_dir = os.path.join(base_dir, "data2025")
 
-for file in glob.glob("*.wav"):
-	wavfiles_z01.append(file) # getting all audiofile names from z01
+path_z01 = os.path.join(data_dir, "Z01_Pos00_RC2_75k_0000", "Z01_Pos00_RC2_75k_0000_1307031427", "Wav")
+path_z05 = os.path.join(data_dir, "Z05_Pos01_RC2_75k_0000", "Z05_Pos01_RC2_75k_0000_1307031535", "Wav")
 
-os.chdir("..")
+wavfiles_z01 = glob.glob(os.path.join(path_z01, "*.wav"))
+wavfiles_z05 = glob.glob(os.path.join(path_z05, "*.wav"))
 
-wavfiles_z05 = []
+print("Z01 WAV files:", wavfiles_z01)
+print("Z05 WAV files:", wavfiles_z05)
 
-os.chdir("Z05")
-
-for file in glob.glob("*.wav"):
-	wavfiles_z05.append(file) # getting all audiofile names from z05
-
-os.chdir("..")
-
-print(wavfiles_z01)
-data, samplerate = sf.read(f"Z01/{wavfiles_z01[0]}")
-print("loaded", data.shape, "at", samplerate, "Hz")
+if wavfiles_z01:
+    data, samplerate = sf.read(wavfiles_z01[0])
+    print("Loaded", data.shape, "at", samplerate, "Hz")
+else:
+    print("Нет файлов в Z01")
 
 # 2.Save the files to the dataFrame
 arr1 = np.array(wavfiles_z01)
@@ -129,7 +126,7 @@ def amplitude_to_db(S, ref=1.0, amin=1e-10):
 #     The formula 20 * log10(amplitude) is the standard for converting amplitude to decibels (dB), similar to measuring loudness.
 # amin is used to avoid the log(0) error
 
-def plot_spectrogram(stft_matrix, filename, f, t, max_freq=20000):
+def plot_spectrogram(stft_matrix, filename, f, t, max_freq=100000):
     plt.figure(figsize=(10, 5))
     db_matrix = amplitude_to_db(stft_matrix)
     plt.pcolormesh(t, f, db_matrix, shading='gouraud', cmap='plasma')
