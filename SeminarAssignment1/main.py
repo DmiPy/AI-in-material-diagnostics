@@ -25,7 +25,7 @@ if wavfiles_z01:
     data, samplerate = sf.read(wavfiles_z01[0])
     print("Loaded", data.shape, "at", samplerate, "Hz")
 else:
-    print("Нет файлов в Z01")
+    print("no files in Z01")
 
 # 2.Save the files to the dataFrame
 arr1 = np.array(wavfiles_z01)
@@ -48,6 +48,7 @@ def getDataFromFileName(array):
 		sIDs.append((arrOfData[8].split("."))[0])
 	return (specs,mIDs,timeFrames,rIDs,sIDs)
 
+print(getDataFromFileName(wavfiles))
 
 specs,mIDs,timeFrames,rIDs,sIDs = getDataFromFileName(wavfiles)
 
